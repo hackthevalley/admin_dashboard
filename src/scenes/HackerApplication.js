@@ -9,6 +9,7 @@ class HackerApplicationScene extends Component {
 
     async componentDidMount() {
         const {reduce} = this.props.globalContext;
+        reduce({fetchingEvents: true, fetchingHackers: true});
         reduce(await fetchEventList());
         reduce(await fetchHackerList());
     }
@@ -76,12 +77,31 @@ class HackerApplicationScene extends Component {
                                 </table>
                             </div>
                             <div className="col-md-3">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=htv-hacker-${hacker._id}`} />
+                                <img
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=htv-hacker-${hacker._id}`}/>
                                 <p className={"text-muted"}>{hacker._id}</p>
                             </div>
                         </div>
-                        <h5>Application</h5>
-                        <div>{JSON.stringify(hackerApplication)}</div>
+                        {hackerApplication ? (
+                            <React.Fragment>
+                                <h5>Application {hackerApplication.submitted_at ? <span className="badge badge-success">Submitted at {hackerApplication.submitted_at}</span>
+                                    : <span className="badge badge-light">In progress...</span>}</h5>
+                                <div>
+                                    {hackerApplication.answers.map(answer => {
+                                        return (
+                                            <div>
+                                                <hr/>
+                                                <p><b>{answer.question.name}</b></p>
+                                                <small className={"text-muted"}>{answer.question.description}</small>
+                                                {answer.answers.map(response => {
+                                                    return <p>{response}</p>;
+                                                })}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </React.Fragment>
+                        ): null}
                     </React.Fragment>
                 ) : null}
 

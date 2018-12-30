@@ -9,6 +9,7 @@ class EventsScene extends Component {
 
     async componentDidMount() {
         const {reduce} = this.props.globalContext;
+        reduce({fetchingEvents: true});
         reduce(await fetchEventList());
     }
 

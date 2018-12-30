@@ -1,41 +1,52 @@
 import htv from 'htv-sdk';
 
+let lastHackerFetch = null;
+
 export async function fetchHackerList() {
-    let data = await htv.Graph.query(`
-        {
-            hackers {
-                _id
-                email_address
-                first_name
-                last_name
-                school
-                phone_number
-                gender
-                dob
-                github
-                linkedin
-                website
-                description
-                created_at
-                applications {
+    if (!lastHackerFetch) {
+        let data = await htv.Graph.query(`
+            {
+                hackers {
                     _id
-                    submitted_at
-                    answers {
-                        question {
-                            name
-                            description
+                    email_address
+                    first_name
+                    last_name
+                    school
+                    phone_number
+                    gender
+                    dob
+                    github
+                    linkedin
+                    website
+                    description
+                    created_at
+                    applications {
+                        _id
+                        submitted_at
+                        answers {
+                            question {
+                                name
+                                description
+                            }
+                            _id
+                            answers
                         }
-                        _id
-                        answer
-                    }
-                    application {
-                        _id
+                        application {
+                            _id
+                        }
                     }
                 }
             }
+        `);
+        lastHackerFetch = new Date();
+        return {
+            hackers: data.hackers,
+            fetchingHackers: false
         }
-    `);
-    return {
-        hackers: data.hackers
+    } else {
+        console.log("Already fetched hackers... skipping...");
+        return {
+            fetchingHackers: false
+        }
     }
 }

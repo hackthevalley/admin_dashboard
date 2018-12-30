@@ -18,8 +18,15 @@ class App extends Component {
     }
 
     render() {
+
+        const {fetchingEvents, fetchingHackers} = this.props.globalContext;
+
         return (
             <React.Fragment>
+                <div className="container-fluid">
+                {fetchingEvents ? <p>Fetching events...</p>: null}
+                {fetchingHackers ? <p>Fetching hackers... this can take a while...</p>: null}
+                </div>
                 <Switch>
                     <Route exact path='/' component={LoginScene}/>
                     <Route exact path='/events' component={EventsScene}/>

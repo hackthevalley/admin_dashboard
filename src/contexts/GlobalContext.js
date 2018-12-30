@@ -17,6 +17,8 @@ export function withGlobalContextProvider(WrappedComponent) {
                 authenticated: false,
                 hackers: [],
                 events: [],
+                fetchingEvents: false,
+                fetchingHackers: false,
                 reduce: this.reduce
             };
         }

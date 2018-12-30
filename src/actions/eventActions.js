@@ -1,20 +1,31 @@
 import htv from 'htv-sdk';
 
+let lastEventFetch = null;
+
 export async function fetchEventList() {
-    let data = await htv.Graph.query(`
-        {
-            events {
-                _id
-                name
-                applications {
+    if(!lastEventFetch) {
+        let data = await htv.Graph.query(`
+            {
+                events {
                     _id
                     name
-                    description
+                    applications {
+                        _id
+                        name
+                        description
+                    }
                 }
             }
+        `);
+        lastEventFetch = new Date();
+        return {
+            events: data.events,
+            fetchingEvents: false
         }
-    `);
-    return {
-        events: data.events
+    } else {
+        console.log("Already fetched all events... skipping...");
+        return {
+            fetchingEvents: false
+        }
     }
 }

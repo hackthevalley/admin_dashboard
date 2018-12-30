@@ -10,6 +10,7 @@ class HackersScene extends Component {
 
     async componentDidMount() {
         const {reduce} = this.props.globalContext;
+        reduce({fetchingEvents: true, fetchingHackers: true});
         reduce(await fetchEventList());
         reduce(await fetchHackerList());
     }
